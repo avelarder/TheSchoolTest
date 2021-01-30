@@ -4,12 +4,14 @@
     <div class="row">
         <form method="post" action="Home/New">
             @Html.AntiForgeryToken()
-
+            @*<input type="text" id="txtQuestion" name="txtQuestion" />
+            <input type="text" id="txtAnswer" name="txtQuestion" />
+            <input type="text" id="txtTag" name="txtQuestion" />*@
             @Html.TextAreaFor(x => x.Question, new { @placeholder = "Your question", @class = "form-control", @style="width: 100%" })
-            <br />
-            @Html.TextAreaFor(x => x.Answer, new { placeholder = "Your answer", @class = "form-control" })
-            <br />
-            @Html.TextAreaFor(x => x.Tags, new { placeholder = "Comma separated", @class = "form-control" })
+        <br />
+        @Html.TextAreaFor(x => x.Answer, new { placeholder = "Your answer", @class = "form-control" })
+        <br />
+        @Html.TextAreaFor(x => x.Tags, new { placeholder = "Comma separated", @class = "form-control" })
             <br />
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

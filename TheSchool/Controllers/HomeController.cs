@@ -28,16 +28,29 @@ namespace TheSchool.Controllers
             //Also create a map from TagItem to TagModel.
             //Use "mapper" attribute which is already defined. More information: https://docs.automapper.org/en/latest/Getting-started.html.
 
-            throw new NotImplementedException();
+            var configurationManager = new AutoMapper.MapperConfiguration(
+                cfg => {
+                    cfg.CreateMap<QuestionAndAnswerModel, KnowledgeBaseItem>()
+                        .ForMember(x => x.Query, opt => opt.MapFrom(z => z.Question))
+                        .ForMember(x => x.LastUpdateOn, opt => opt.MapFrom(z => DateTime.Now));
 
+                    cfg.CreateMap<TagItem, TagModel>();
+                });
+            mapper = configurationManager.CreateMapper();
         }
 
         public ActionResult Index()
         {
             //TODO: Return a view "Index" with all the required information for the nested views.
             //You need to call TagHelper.Process as shown below in order to populate the object "HomeViewModel".
+            var model = new HomeViewModel();
+            model.QA = new QuestionAndAnswerModel();
             
-            throw new NotImplementedException();
+
+            var tagList = TagHelper.Process(KnowledgeBaseQuery, out int tagMaxCount);
+            model.Tags = new TagCloudModel() { Tags = mapper.Map<List<TagModel>>(tagList), MaxCount = tagMaxCount };
+
+            return View("Index", model);
         }
         public ActionResult Entry()
         {
@@ -47,11 +60,11 @@ namespace TheSchool.Controllers
         [HttpGet]
         public ActionResult TagCloud()
         {
-            //TODO: Return partival view "TagCloud" with an instance of TagCloudviewModel.
+            //TODO: Return partial view "TagCloud" with an instance of TagCloudviewModel.
             //You need to call TagHelper.Process as shown below.
-            
+
+            //TagHelper.Process()
             throw new NotImplementedException();
-            
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -59,8 +72,15 @@ namespace TheSchool.Controllers
         {
             //TODO: Return partial view "Index" to reload the page.
             //If model is valid then persists the new entry on DB. Make sure  data changes are committed.
-            
-            throw new NotImplementedException();
+            if (ModelState.IsValid)
+            {
+                var entity = mapper.Map<KnowledgeBaseItem>(model);
+                KnowledgeBaseData.Add(entity);
+                KnowledgeBaseData.CommitChanges();
+
+                return RedirectToAction("Index");
+            }
+            return Index();
         }
         public IActionResult Privacy()
         {

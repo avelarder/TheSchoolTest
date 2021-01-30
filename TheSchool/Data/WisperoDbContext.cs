@@ -10,7 +10,7 @@ namespace TheSchool.Data
 {
     public class WisperoDbContext : System.Data.Entity.DbContext
     {
-        public WisperoDbContext() : base("WisperoTestDB")
+        public WisperoDbContext() : base("theSchoolDB")
         {
             Database.SetInitializer<WisperoDbContext>(null);
         }

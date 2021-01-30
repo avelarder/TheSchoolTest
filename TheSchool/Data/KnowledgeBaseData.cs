@@ -23,7 +23,8 @@ namespace TheSchool.Data
         public void Add(KnowledgeBaseItem entity)
         {
             //TODO: Implement Adding mechanism for KnowledgeBaseItems.
-            throw new NotImplementedException();
+            _context.KnowledgeBaseItems.Add(entity);
+            _context.SaveChanges();
         }
 
         public void CommitChanges()
@@ -47,21 +48,18 @@ namespace TheSchool.Data
         public KnowledgeBaseItem Get(int id)
         {
             //TODO: Implement Getting by Id mechanism for KnowledgeBaseItems.
-            throw new NotImplementedException();
-            
+            return _context.KnowledgeBaseItems.FirstOrDefault(x => x.Id == id);
         }
 
         public List<KnowledgeBaseItem> GetAll()
         {
-            //TODO: Implement Getting ALL mechanism for KnowledgeBaseItems.
-            throw new NotImplementedException();
-        
+            return _context.KnowledgeBaseItems.ToList();
         }
 
         public List<KnowledgeBaseItem> GetByFilter(Expression<Func<KnowledgeBaseItem, bool>> expression)
         {
             //TODO: Implement Getting by Filter mechanism for KnowledgeBaseItems.
-            throw new NotImplementedException();
+            return _context.KnowledgeBaseItems.Where(expression).ToList();
         }
 
         #endregion

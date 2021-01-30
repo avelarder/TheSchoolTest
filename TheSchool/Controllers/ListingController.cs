@@ -22,8 +22,17 @@ namespace TheSchool.Controllers
             //TODO: Implement mapping from Entities.KnowledgeBaseItem to QuestionAndAnswerItemModel.
             //LastUpdateOn field is set with DateTime.Now and Tags field with lowercase.
             //Also create a map from TagItem to TagModel.
-            throw new NotImplementedException();
-           
+            var configurationManager = new AutoMapper.MapperConfiguration(
+               cfg => {
+                   cfg.CreateMap<KnowledgeBaseItem, QuestionAndAnswerItemModel>()
+                       .ForMember(x => x.Question, opt => opt.MapFrom(z => z.Query))
+                       .ForMember(x => x.LastUpdateOn, opt => opt.MapFrom(z => DateTime.Now))
+                       .ForMember(x => x.Tags, opt => opt.MapFrom(z => z.Tags.ToLower()));
+
+                   //cfg.CreateMap<TagItem, TagModel>();
+               });
+            mapper = configurationManager.CreateMapper();
+
         }
 
         [HttpGet]
@@ -31,7 +40,16 @@ namespace TheSchool.Controllers
         {
             //TODO: Implement the corresponding call to get all items or filtered by tag.
             //Return an instance of ListingViewModel.
-            throw new NotImplementedException();
+            var results = string.IsNullOrEmpty(tag)
+                ? KnowledgeQuery.GetAll()
+                : KnowledgeQuery.GetByFilter(x => x.Tags.Contains(tag));
+
+            ListingViewModel model = new ListingViewModel()
+            {
+                Questions = mapper.Map < List<QuestionAndAnswerItemModel>>( results),
+                Tag = tag
+            };
+            return View("Index", model);
         }
 
         [HttpPost]
