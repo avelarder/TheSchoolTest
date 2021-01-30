@@ -13,7 +13,7 @@ namespace ImageSource
     {
         ISerializer serializer;
         IRestClient client;
-        ApiHelper<Todos> helper;
+        ApiHelper<Photo> helper;
 
         [TestInitialize]
         public void TestInitializer()
@@ -21,7 +21,7 @@ namespace ImageSource
             serializer = new SerializerImp();
             client = new RestClientImpl();
 
-            helper = new ApiHelper<Todos>(client, serializer, "todos");
+            helper = new ApiHelper<Photo>(client, serializer, "photo");
         }
 
         [TestMethod]
